@@ -1,4 +1,19 @@
-version: 1
-start:
-  command: ["npm", "start"]
-  port: 5000
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required: ["mongodbUri"]
+    properties:
+      mongodbUri:
+        type: string
+        title: "MongoDB URI"
+        description: "URI de conexão do MongoDB (incluindo usuário e senha)"
+  commandFunction: |-
+    (config) => ({
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": {
+        "MONGODB_URI": config.mongodbUri,
+        "PORT": "5000"
+      }
+    })
